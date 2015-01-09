@@ -1,0 +1,38 @@
+{
+  "name": "Tiki",
+  "version": "0.0.0",
+  "description": "High capacity ticketing system",
+  "main": "bin/index.js",
+  "bin": {
+    "Tiki": "bin/index.js"
+  },
+  "scripts": {
+    "test": "bin/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Luphia/Tiki.git"
+  },
+  "keywords": [
+    "Ticketing",
+    "Node"
+  ],
+  "author": "Luphia Chang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Luphia/Tiki/issues"
+  },
+  "homepage": "https://github.com/Luphia/Tiki",
+  "dependencies": {
+    "express": ">=4.10.7",
+    "express-session": ">=1.10.1",
+    "body-parser": ">=1.10.1",
+    "cookie-parser": ">=1.3.3",
+    "serve-favicon": ">=2.2.0",
+    "jade": ">=1.8.2",
+    "socket.io": ">=1.2.1",
+    "compression": ">=1.3.0",
+    "log4js": ">=0.6.21",
+    "mongodb": ">=1.4.28"
+  }
+}
