@@ -6,6 +6,11 @@ Channel.prototype.init = function(config) {
 	if(config) {
 		this.setConfig(config);
 	}
+
+	this.connection = {
+		current: 0,
+		history: 0
+	};
 };
 Channel.prototype.setConfig = function(config) {
 	this.config = config;
@@ -16,13 +21,17 @@ Channel.prototype.start = function() {
 	,	io = this.io;
 
 	io.on('connection', function(socket) {
-		io.emit('channel', {'event': 'enter', 'data': {'client': socket.client.id}});
+		self.connection.current += 1;
+		self.connection.history += 1;
+
+		socket.emit('channel', {'event': 'views', 'data': self.connection.history });
+		socket.broadcast.emit('channel', {'event': 'enter', 'data': {'client': socket.client.id}});
 		socket.on('disconnect', function() {
-			io.emit('channel', {'event': 'leave', 'data': {'client': socket.client.id}});
+			self.connection.current -= 1;
+
+			socket.broadcast.emit('channel', {'event': 'leave', 'data': {'client': socket.client.id}});
 		});
 	});
 };
-Channel.prototype.setPath = function() {};
-Channel.prototype.setRoom = function() {};
 
 module.exports = Channel;

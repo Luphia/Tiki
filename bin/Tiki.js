@@ -1,11 +1,15 @@
+#!/usr/bin/env node
+
 var config = require('../config.private')
 ,	Web = require('../services/Web.js')
 ,	Channel = require('../services/Channel.js')
 ,	log4js = require('log4js')
+,	Seller = require('../services/Classes/Seller.js')
 ;
 
 var web = new Web()
 ,	channel = new Channel()
+,	seller = new Seller()
 ;
 
 log4js.configure(config.get('log4js'));
@@ -27,6 +31,7 @@ process.on('uncaughtException', function(err) {
 
 web.setConfig(config);
 channel.setConfig(config);
+seller.setConfig(config);
 
 web.start();
 channel.start();

@@ -2,7 +2,7 @@
   "name": "Tiki",
   "version": "0.0.0",
   "description": "High capacity ticketing system",
-  "main": "./bin/index.js",
+  "main": "./bin/Tiki.js",
   "bin": {
     "Tiki": "./bin/Tiki.js"
   },
@@ -34,6 +34,7 @@
     "socket.io": ">=1.2.1",
     "compression": ">=1.3.0",
     "log4js": ">=0.6.21",
-    "mongodb": ">=1.4.28"
+    "mongodb": ">=1.4.28",
+    "deasync": "0.0.7"
   }
 }
