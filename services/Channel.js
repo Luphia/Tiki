@@ -57,6 +57,8 @@ Channel.prototype.buyEvent = function(ev, number, client) {
 	return rs;
 };
 Channel.prototype.update = function() {
+	return true;
+	/*
 	var now = new Date() * 1;
 	var per = 10000;
 	if(now - lastUpdate > per) {
@@ -67,6 +69,7 @@ Channel.prototype.update = function() {
 	else {
 		return false;
 	}
+	*/
 };
 Channel.prototype.setOwner = function(client, customer) {
 
