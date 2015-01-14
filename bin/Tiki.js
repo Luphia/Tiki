@@ -29,9 +29,11 @@ process.on('uncaughtException', function(err) {
 	logger.exception.error(err);
 });
 
+seller.setConfig(config);
+seller.setTicket();
 web.setConfig(config);
 channel.setConfig(config);
-seller.setConfig(config);
+channel.setSeller(seller);
 
 web.start();
 channel.start();

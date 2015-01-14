@@ -1,3 +1,10 @@
+/*
+	13372 message per sec in socket.io (50 byte)
+	18352 transaction with search per sec;
+	10460251 transaction per sec;
+	but... 20byte per ticket -> 20MB for 100,000 tickets data;
+ */
+
 var EasyDB = require('./EasyDB.js')
 ,	total = 0
 ,	no = 0
@@ -50,51 +57,70 @@ Seller.prototype.init = function(config) {
 	if(config) {
 		this.setConfig(config);
 	}
+
+	this.client = {};
+	this.clientBuy = {};
 };
 
 Seller.prototype.setConfig = function(config) {
 	this.config = config;
 	this.db = new EasyDB();
 	this.db.connect({"url": this.config.get("mongo").uri});
+	this.loadTicket();
 };
 
 Seller.prototype.loadTicket = function() {
-	var data = this.db.listData('concert');
+	var data = this.db.listData('concert').list;
 	this.tickets = [];
+	this.remainTickets = [];
 	this.index = {};
-	this.lock = {};
+	this.typeIndex = {};
+
 	for(var key in data) {
-		if(data[key]._id % total == this.no) {
-			var index = this.tickets.push(data[key]) - 1;
-			this.index[data[key]['code']] = index;
-			this.lock[data[key]['code']] = false;
+		var index = this.tickets.push(data[key]) - 1;
+
+		if(!data[key].secret) {
+			this.remainTickets.push(data[key].code);
 		}
+
+		var type = data[key].type;
+		this.index[data[key]['code']] = index;
+		
+		if(!this.typeIndex[type]) {
+			this.typeIndex[type] = [];
+		}
+		this.typeIndex[type].push(index);
 	}
 };
 
 Seller.prototype.lock = function(code) {
-	if(this.lock[code] || !this.lock.hasOwnProperty(code)) {
-		return false;
-	}
 	if(this.index.hasOwnProperty(code) && !this.tickets[ this.index[code] ].secret) {
 		var secret = randomID(8);
 		this.tickets[ this.index[code] ].secret = secret;
 
-		var type = this.tickets[ this.index[code] ].type;
-		this.remainTickets[type] -= 1;
+		// should move to sell event
+		this.remainTickets.splice( this.remainTickets.indexOf(code), 1 );
+		//var type = this.tickets[ this.index[code] ].type;
+		//this.remainTickets[type] -= 1;
+
 		return secret;
+	}
+	else {
+		return false;
 	}
 };
 
 Seller.prototype.lockByType = function(type) {
 	var code, key;
-	for(var k in this.tickets) {
-		if(this.tickets[k].type == type && !this.tickets[k].secret) {
-			code = this.tickets[k].code;
+	for(var k in this.typeIndex[type]) {
+		var index = this.typeIndex[type][k];
+		if(!this.tickets[index].secret) {
+			code = this.tickets[index].code;
 			key = this.lock(code);
-		}
-		if(key) {
-			return [code, key];
+			if(key) {
+				return [code, key];
+				break;
+			}
 		}
 	}
 
@@ -117,11 +143,15 @@ Seller.prototype.lockByEvent = function(event) {
 }
 
 Seller.prototype.unlock = function(code, key) {
-	if(this.lock[code] == key) {
-		this.lock[code] = false;
 
-		var type = this.tickets[ this.index[code] ].type;
-		this.remainTickets[type] += 1;
+	if(this.index.hasOwnProperty(code) && this.tickets[ this.index[code] ].secret == code) {
+		delete this.tickets[ this.index[code] ].secret;
+
+		// should move to return event
+		this.remainTickets.push(code);
+		//var type = this.tickets[ this.index[code] ].type;
+		//this.remainTickets[type] += 1;
+
 		return true;
 	}
 	else {
@@ -131,9 +161,15 @@ Seller.prototype.unlock = function(code, key) {
 
 Seller.prototype.sellByCode = function(code, customer) {
 	var key = this.lock(code);
+	var customer = customer.toString();
 	if(key) {
 		this.tickets[this.index[code]].secret = key;
 		this.tickets[this.index[code]].owner = customer;
+
+		if(!this.clientBuy[customer]) {
+			this.clientBuy[customer] = [];
+		}
+		this.clientBuy[customer].push(this.index[code]);
 
 		return [code, key];
 	}
@@ -142,11 +178,20 @@ Seller.prototype.sellByCode = function(code, customer) {
 	}
 };
 
+Seller.prototype.setInfo = function(customer, info) {
+	this.client[customer] = info;
+};
+
 Seller.prototype.sellByType = function(type, customer) {
 	var ticket = this.lockByType(type);
 	if(ticket) {
 		var code = ticket[0]
 		,	secret = ticket[1];
+
+		if(!this.clientBuy[customer]) {
+			this.clientBuy[customer] = [];
+		}
+		this.clientBuy[customer].push(this.index[code]);
 
 		this.tickets[ this.index[code] ].owner = customer;
 		return ticket;
@@ -157,39 +202,21 @@ Seller.prototype.sellByType = function(type, customer) {
 };
 
 Seller.prototype.sellByEvent = function(event, customer) {
-	var ticket = this.lockByType(type);
+	var ticket = this.lockByEvent(event);
 	if(ticket) {
 		var code = ticket[0]
 		,	secret = ticket[1];
+
+		if(!this.clientBuy[customer]) {
+			this.clientBuy[customer] = [];
+		}
+		this.clientBuy[customer].push(this.index[code]);
 
 		this.tickets[ this.index[code] ].owner = customer;
 		return ticket;
 	}
 	else {
 		return false;
-	}
-};
-
-Seller.prototype.remain = function(reset) {
-	if(!this.remainTickets || reset) {
-		for(var k in this.tickets) {
-			if(this.remainTickets[ this.tickets[k].type ]) {
-				this.remainTickets[ this.tickets[k].type ] = 1;
-			}
-			else {
-				this.remainTickets[ this.tickets[k].type ] ++;
-			}
-		}
-	}
-
-	var rs = {
-		total: 0,
-		detail: []
-	};
-
-	for(var k in this.remainTickets) {
-		rs.detail[k] = this.remainTickets[k];
-		rs.total += this.remainTickets[k];
 	}
 };
 
@@ -235,6 +262,26 @@ Seller.prototype.setTicket = function(options) {
 	}
 	console.log(data.length);
 	this.db.postData(ticketOptions.event, data);
+	this.loadTicket();
 };
+
+Seller.prototype.test = function() {
+	var s = new Date();
+	var times = 10000000;
+
+	var get = 0;
+	for(var i=0; i<times; i++) {
+		var ticket = this.sellByCode('A1000000499', 'Yo');
+		if(ticket) {
+			get++;
+			console.log("get Ticket: %s", ticket);
+		}
+	}
+	console.log("total get: %d", get);
+
+	var sec = (new Date() - s) / 1000;
+	console.log("cost: %d sec", sec);
+	console.log("req per sec: %d", times/sec);
+}
 
 module.exports = Seller;
