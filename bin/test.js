@@ -1,11 +1,7 @@
-var config = require('../config.private')
-,	Web = require('../services/Web.js')
-,	Channel = require('../services/Channel.js')
-;
+#!/usr/bin/env node
 
-var web = new Web()
-,	channel = new Channel()
-;
-
-web.start();
-channel.start();
+var cp = require('child_process');
+var n = 600;
+for(var i = 0; i < n; i++) {
+	cp.fork(__dirname + '/single.js');
+}
