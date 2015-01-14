@@ -71,7 +71,6 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 		$scope.views++;
 		$scope.online = d;
 		$scope.$digest();
-		console.log($scope.views);
 	};
 	var getTickets = function(d) {
 		$scope.remainTickets = d;
@@ -124,6 +123,5 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 		}
 
 		tickets = $scope.remainTickets;
-		console.log(countRemain());
 	};
 });
