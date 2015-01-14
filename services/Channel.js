@@ -86,7 +86,7 @@ Channel.prototype.start = function() {
 		socket.on('disconnect', function() {
 			self.connection.current -= 1;
 
-			socket.broadcast.emit('channel', {'event': 'leave', 'data': {'client': socket.client.id}});
+			if(self.update()) { socket.broadcast.emit('channel', {'event': 'enter', 'data': self.connection}); }
 		});
 
 		socket.on('channel', function(_event) {
