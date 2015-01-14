@@ -27,10 +27,6 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 				customerEnter(d.data);
 				break;
 
-			case 'views':
-				initViews(d.data);
-				break;
-
 			case 'getTickets':
 				getTickets(d.data);
 				$scope.$digest();
@@ -63,13 +59,9 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 		$scope.io.emit('channel', {"event": "buyType", "data": {"type": type, "number": number}})
 	}
 
-	var initViews = function(d) {
-		$scope.views = d;
-		$scope.$digest();
-	};
 	var customerEnter = function(d) {
-		$scope.views++;
-		$scope.online = d;
+		$scope.views = d.history;
+		$scope.online = d.current;
 		$scope.$digest();
 	};
 	var getTickets = function(d) {

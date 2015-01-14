@@ -2,6 +2,8 @@ var Channel = function(config) {
 	this.init(config);
 };
 
+var lastUpdate = 0;
+
 Channel.prototype.init = function(config) {
 	if(config) {
 		this.setConfig(config);
@@ -54,6 +56,17 @@ Channel.prototype.buyEvent = function(ev, number, client) {
 
 	return rs;
 };
+Channel.prototype.update = function() {
+	var now = new Date() * 1;
+	var per = 3000;
+	if(now - lastUpdate > per) {
+		lastUpdate = now;
+		return true;
+	}
+	else {
+		return false;
+	}
+};
 Channel.prototype.setOwner = function(client, customer) {
 
 };
@@ -68,8 +81,8 @@ Channel.prototype.start = function() {
 		self.connection.current += 1;
 		self.connection.history += 1;
 
-		socket.emit('channel', {'event': 'views', 'data': self.connection.history });
-		socket.broadcast.emit('channel', {'event': 'enter', 'data': self.connection.current});
+		socket.emit('channel', {'event': 'enter', 'data': self.connection});
+		if(self.update()) { socket.broadcast.emit('channel', {'event': 'enter', 'data': self.connection}); }
 		socket.on('disconnect', function() {
 			self.connection.current -= 1;
 
