@@ -113,7 +113,7 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 		else {
 			$scope.remainTickets.splice( $scope.remainTickets.indexOf(d), 1 );
 		}
-
+		countRemain();
 		tickets = $scope.remainTickets;
 	};
 });

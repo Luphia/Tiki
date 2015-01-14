@@ -58,8 +58,9 @@ Channel.prototype.buyEvent = function(ev, number, client) {
 };
 Channel.prototype.update = function() {
 	var now = new Date() * 1;
-	var per = 3000;
+	var per = 10000;
 	if(now - lastUpdate > per) {
+
 		lastUpdate = now;
 		return true;
 	}
