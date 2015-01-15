@@ -45,6 +45,8 @@ Bot.prototype.init = function(config) {
 				break;
 			case 'buyType':
 				self.getBuyType(data);
+			case 'buyCode':
+				self.getBuyCode(data);
 		}
 	});
 
@@ -89,6 +91,16 @@ Bot.prototype.getSold = function(tickets) {
 		this.remainType[type]--;
 	}
 };
+Bot.prototype.getBuyCode = function(data) {
+
+	if(data) {
+		this.want--;
+		this.goods.push(data);
+		console.log(this.ID + " get " + data[0]);
+	}
+
+	this.done();
+};
 Bot.prototype.getBuyType = function(data) {
 	for(var k in data) {
 		if(data[k]) {
@@ -119,6 +131,7 @@ Bot.prototype.consider = function(action, probability) {
 };
 
 Bot.prototype.shopping = function() {
+/*
 	this.todo = 1;
 
 	var targets = [];
@@ -137,6 +150,17 @@ Bot.prototype.shopping = function() {
 	}
 	else {
 		this.consider(function() { self.finish(); });
+	}
+*/
+
+	this.todo = this.want;
+
+	var self = this;
+	var targets = [];
+	for(var i = 0; i < this.want; i++) {
+		var target = this.remainTickets[ Math.floor(Math.random() * this.remainTickets.length) ];
+		var data = target;
+		this.consider(function() { self.request('buyCode', data); });
 	}
 };
 Bot.prototype.finish = function() {
