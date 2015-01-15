@@ -51,6 +51,7 @@ Bot.prototype.init = function(config) {
 	this.want = parseInt(random(1, 4));
 	this.goods = [];
 	this.remainTickets = [];
+	this.remainType = {};
 	this.request('getTickets');
 };
 
@@ -66,6 +67,7 @@ Bot.prototype.request = function(ev, data) {
 Bot.prototype.getTickets = function(data) {
 	this.remainTickets = data;
 	this.countRemain();
+	this.active = true;
 };
 Bot.prototype.countRemain = function() {
 	this.remainType = {};
@@ -78,6 +80,8 @@ Bot.prototype.countRemain = function() {
 	return this.remainType;
 };
 Bot.prototype.getSold = function(tickets) {
+	if(!this.active) return false;
+
 	for(var k in tickets) {
 		var ticket = tickets[k];
 		var type = ticket.substr(0, 3);
