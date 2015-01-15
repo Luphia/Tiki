@@ -67,6 +67,33 @@
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#03ffffff', endColorstr='#e6ffffff',GradientType=0 ); /* IE6-9 */
 	}
 
+	.tickets > div {
+		padding: 20px;
+		float: left;
+		width: 40%;
+		margin-right: 30px;
+	}
+	.tickets > div > div.sale {
+		float: left;
+		color: #333;
+		padding: 5px;
+		background: rgba(255, 120, 0, .2);
+		border: solid 1px rgba(250, 120, 0, .5);
+		margin: 2px;
+		border-radius: 5px;
+	}
+	.ticket.ng-scope {
+		background: rgba(255, 0, 0,.1);
+		border: solid 1px rgba(255,0,0,.2);
+		width: 200px;
+		line-height: 50px;
+		text-align: center;
+		color: #666;
+		border-radius: 5px;
+		float: left;
+		margin: 2px;
+	}
+
 	.button {
 		display: inline-block;
 		padding: 10px 40px 15px;
@@ -106,11 +133,10 @@
 		padding: 3px 5px 8px;
 		border-radius: 5px;
 		cursor: pointer;
-		background: #a00;
-		border-left: solid 1px #600;
-		border-right: solid 1px #600;
-		border-bottom: solid 4px #600;
+		background: rgba(200, 0, 0, .2);
+		border: solid 1px rgba(200, 0, 0, .5);
 		font-size: .9em;
+		font-weight: 100;
 
 		-webkit-touch-callout: none;
 		-webkit-user-select: none;
@@ -120,18 +146,12 @@
 		user-select: none;
 	}
 	.sbutton:hover {
-		padding-top: 5px;
-		background: #b00;
-		border-left: solid 1px #700;
-		border-right: solid 1px #700;
-		border-bottom: solid 2px #700;
+		background: rgba(200, 0, 0, .3);
+		border: solid 1px rgba(200, 0, 0, .6);
 	}
 	.sbutton:active {
-		padding-top: 6px;
-		background: #b00;
-		border-left: solid 1px #700;
-		border-right: solid 1px #700;
-		border-bottom: solid 1px #700;
+		background: rgba(200, 0, 0, .4);
+		border: solid 1px rgba(200, 0, 0, .7);
 	}
 </style>
 </head>
@@ -149,17 +169,19 @@
 
 <div class="tickets">
 	<div>
-		<h3>剩餘票券（線上人數：{{online}}）</h3>
-		<div ng-repeat="(k, v) in countTickets.detail">
-			{{k}} - {{v}}
-			<a class="sbutton" ng-click="buyType(k, 1)">買一張</a>
-			<a class="sbutton" ng-click="buyType(k, 2)">買二張</a>
-			<a class="sbutton" ng-click="buyType(k, 3)">買三張</a>
+		<h3>剩餘票券 {{countTickets.total}}（線上人數：{{online}}）(已售出：{{soldout.length}})</h3>
+		<div ng-repeat="(k, v) in countTickets.detail" class="sale">
+			<div>{{k}} - {{v}}</div>
+			<div>
+				<a class="sbutton" ng-click="buyType(k, 1)">買一張</a>
+				<a class="sbutton" ng-click="buyType(k, 2)">買二張</a>
+				<a class="sbutton" ng-click="buyType(k, 3)">買三張</a>
+			</div>
 		</div>
 	</div>
 	<div>
-		<h3>我已購買</h3>
-		<div ng-repeat="(k, v) in bought">
+		<h3>我已購買 {{bought.length}}</h3>
+		<div ng-repeat="(k, v) in bought" class="ticket">
 			<label>{{v[0].substr(0,3)}}</label>
 			<a>{{v[0]}}</a>
 		</div>

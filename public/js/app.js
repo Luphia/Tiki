@@ -19,6 +19,7 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 	$scope.remainTickets = [];
 	$scope.countTickets = {};
 	$scope.bought = [];
+	$scope.soldout = [];
 	$scope.io.emit('channel', {"event": "getTickets"});
 
 	$scope.io.on('channel', function(d) {
@@ -108,10 +109,12 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 			for(var k in d) {
 				var code = d[k];
 				$scope.remainTickets.splice( $scope.remainTickets.indexOf(code), 1 );
+				$scope.soldout.push(code);
 			}
 		}
 		else {
 			$scope.remainTickets.splice( $scope.remainTickets.indexOf(d), 1 );
+			$scope.soldout.push(d);
 		}
 		countRemain();
 		tickets = $scope.remainTickets;
