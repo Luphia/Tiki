@@ -112,7 +112,7 @@ Bot.prototype.focus = function() {
 Bot.prototype.consider = function(action, probability) {
 	if(!parseFloat(probability)) { probability = 1; }
 
-	var time = random(5000, 30000);
+	var time = random(0, 5000);
 	if(Math.random() < probability) {
 		setTimeout(action, time);
 	}

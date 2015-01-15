@@ -47,6 +47,12 @@
 		font-size: 1.5em;
 		font-weight: 100;
 	}
+	div.banner h3 > a {
+		font-size: 1.5em;
+		color: #d33;
+		text-shadow: 0px 0px 1px #fff;
+		font-weight: 500;
+	}
 	div.banner .operate {
 		margin-top: 100px;
 	}
@@ -163,7 +169,7 @@
 	<div class="operate">
 		<a class="button">前往購票</a>
 
-		<h3>生涯最後，不容錯過</h3>
+		<h3>只剩 <a>{{countTickets.total}}</a> 名額！ 生涯最後，不容錯過！</h3>
 	</div>
 </div>
 
