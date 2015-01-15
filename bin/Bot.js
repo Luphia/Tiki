@@ -50,6 +50,7 @@ Bot.prototype.init = function(config) {
 
 	this.want = parseInt(random(1, 4));
 	this.goods = [];
+	this.remainTickets = [];
 	this.request('getTickets');
 };
 

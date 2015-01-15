@@ -161,13 +161,14 @@
 	<h2>告別歌壇演唱會</h2>
 	<h2>全球 {{views}} 歌迷共同矚目</h2>
 	<div class="operate">
-		<div class="button">前往購票</div>
+		<a class="button">前往購票</a>
 
 		<h3>生涯最後，不容錯過</h3>
 	</div>
 </div>
 
 <div class="tickets">
+	<a name="buy"></a>
 	<div>
 		<h3>剩餘票券 {{countTickets.total}}（線上人數：{{online}}）(已售出：{{soldout.length}})</h3>
 		<div ng-repeat="(k, v) in countTickets.detail" class="sale">
