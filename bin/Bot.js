@@ -169,6 +169,7 @@ Bot.prototype.finish = function() {
 	}
 	else {
 		console.log('Goodbye, ' + this.ID);
+		this.connect.disconnect();
 	}
 };
 Bot.prototype.start = function() {
