@@ -170,7 +170,7 @@ Bot.prototype.finish = function() {
 	}
 	else {
 		var worktime = new Date() - this.birth;
-		console.log('\x1b[32m%s\x1b[0m worktime - %s sec', this.ID, worktime);
+		console.log('\x1b[32m%s\x1b[0m worktime - %d sec', this.ID, (worktime / 1000));
 		this.connect.disconnect();
 	}
 };

@@ -10,5 +10,5 @@ for(var i = 0; i < times; i++) {
 
 	cp.fork(__dirname + '/test.js');
 
-	if((i+1) % 100 == 0) console.log("\x1b[32m%d Bots\x1b[0m lunched (per 100 in \x1b[32m%d\x1b[0m second)", i + 1);
+	if((i+1) % 100 == 0) console.log("\x1b[32m%d Bots\x1b[0m lunched (per 100 in \x1b[32m%d\x1b[0m second)", i + 1, parseInt((new Date() - start) / 1000));
 }
