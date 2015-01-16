@@ -31,6 +31,7 @@ Bot.prototype.init = function(config) {
 	var self = this;
 
 	this.ID = "BOT" + zeroFill(++ID, 8);
+	this.birth = new Date();
 	this.connect = io('ws://10.10.23.55');
 	this.connect.on('channel', function(d) {
 		var ev = d.event
@@ -168,7 +169,8 @@ Bot.prototype.finish = function() {
 		this.shopping();
 	}
 	else {
-		console.log('Goodbye, ' + this.ID);
+		var worktime = new Date() - this.birth;
+		console.log('\x1b[32m%s\x1b[0m worktime - %s sec', this.ID, worktime);
 		this.connect.disconnect();
 	}
 };
