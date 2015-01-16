@@ -31,7 +31,7 @@ Bot.prototype.init = function(config) {
 	var self = this;
 
 	this.ID = "BOT" + zeroFill(++ID, 8);
-	this.connect = io('ws://10.10.23.55');
+	this.connect = io('ws://172.17.143.7');
 	this.connect.on('channel', function(d) {
 		var ev = d.event
 		,	data = d.data
