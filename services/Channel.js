@@ -129,9 +129,10 @@ Channel.prototype.start = function() {
 					}
 
 					socket.emit('channel', rs);
-					if(brs.data.length > 0) io.emit('channel', brs);
-
-					self.isFinish();
+					if(brs.data.length > 0) {
+						io.emit('channel', brs);
+						self.isFinish();
+					}
 					break;
 
 				case 'buyType':
@@ -156,9 +157,10 @@ Channel.prototype.start = function() {
 					}
 
 					socket.emit('channel', rs);
-					if(brs.data.length > 0) io.emit('channel', brs);
-
-					self.isFinish();
+					if(brs.data.length > 0) {
+						io.emit('channel', brs);
+						self.isFinish();
+					}
 					break;
 
 				case 'buyEvent':
@@ -183,9 +185,10 @@ Channel.prototype.start = function() {
 					}
 
 					socket.emit('channel', rs);
-					if(brs.data.length > 0) io.emit('channel', brs);
-
-					self.isFinish();
+					if(brs.data.length > 0) {
+						io.emit('channel', brs);
+						self.isFinish();
+					}
 					break;
 			}
 		});
@@ -199,11 +202,16 @@ Channel.prototype.isFinish = function() {
 	this.seller.loadTicket();
 	this.remainTickets = this.seller.remainTickets;
 
-	this.io.emit('channel', {
-		"event": "getTickets",
-		"times": this.times,
-		"data": this.getTickets()
-	});
+	try {
+		this.io.emit('channel', {
+			"event": "getTickets",
+			"times": this.times,
+			"data": this.getTickets()
+		});
+	}
+	catch(e) {
+		console.log(e);
+	}
 };
 
 module.exports = Channel;
