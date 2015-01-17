@@ -18,6 +18,7 @@ Channel.prototype.init = function(config) {
 	};
 
 	this.remainTickets = [];
+	this.point = 0;
 };
 Channel.prototype.setConfig = function(config) {
 	this.config = config;
@@ -31,6 +32,15 @@ Channel.prototype.setSeller = function(seller) {
 
 Channel.prototype.getTickets = function() {
 	return this.remainTickets;
+};
+Channel.prototype.getAreaTickets = function() {
+	var i = 0, rs = [];
+	var pick = 10;
+	if(pick > this.remainTickets.length) { return this.remainTickets; }
+
+	var s = Math.floor( Math.random() * (this.remainTickets.length - 10) );
+
+	return this.remainTickets.slice(s, s + 10);
 };
 Channel.prototype.buyCode = function(code, client) {
 	var rs = this.seller.sellByCode(code, client);
@@ -110,6 +120,15 @@ Channel.prototype.start = function() {
 					socket.emit('channel', rs);
 					break;
 
+				case 'getAreaTickets':
+					rs = {
+						"event": "getTickets",
+						"times": self.times,
+						"data": self.getAreaTickets()
+					};
+					socket.emit('channel', rs);
+					break;
+
 				case 'buyCode':
 					var code = data;
 					var client = socket.client.id;
@@ -128,9 +147,14 @@ Channel.prototype.start = function() {
 						brs.data.push(rs.data[0]);
 					}
 
-					socket.emit('channel', rs);
+					try {
+						socket.emit('channel', rs);
+					} catch(e) {}
 					if(brs.data.length > 0) {
-						io.emit('channel', brs);
+						try {
+							io.emit('channel', brs);
+						}
+						catch(e) {}
 						self.isFinish();
 					}
 					break;
@@ -156,9 +180,14 @@ Channel.prototype.start = function() {
 						}
 					}
 
-					socket.emit('channel', rs);
+					try {
+						socket.emit('channel', rs);
+					} catch(e) {}
 					if(brs.data.length > 0) {
-						io.emit('channel', brs);
+						try {
+							io.emit('channel', brs);
+						}
+						catch(e) {}
 						self.isFinish();
 					}
 					break;
@@ -184,9 +213,14 @@ Channel.prototype.start = function() {
 						}
 					}
 
-					socket.emit('channel', rs);
+					try {
+						socket.emit('channel', rs);
+					} catch(e) {}
 					if(brs.data.length > 0) {
-						io.emit('channel', brs);
+						try {
+							io.emit('channel', brs);
+						}
+						catch(e) {}
 						self.isFinish();
 					}
 					break;

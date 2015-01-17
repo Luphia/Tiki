@@ -173,6 +173,8 @@ Bot.prototype.finish = function() {
 		console.log('\x1b[32m%s\x1b[0m worktime - %d sec', this.ID, (worktime / 1000));
 		this.connect.disconnect();
 
+		this.ID = "BOT" + zeroFill(++ID, 8);
+		this.birth = new Date();
 		this.connect.connect();
 		this.want = parseInt(random(1, 4));
 		this.goods = [];
