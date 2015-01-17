@@ -32,7 +32,7 @@ Bot.prototype.init = function(config) {
 
 	this.ID = "BOT" + zeroFill(++ID, 8);
 	this.birth = new Date();
-	this.connect = io('ws://10.10.23.55');
+	this.connect = io('ws://tiki.cc-wei.com');
 	this.connect.on('channel', function(d) {
 		var ev = d.event
 		,	data = d.data

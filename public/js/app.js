@@ -11,9 +11,11 @@ var Tiki = angular.module('Tiki', [
 
 var myIO;
 var tickets;
+var again;
 
 Tiki.controller('TicketsCtrl', function ($scope, $http) {
 	$scope.views = 0;
+	$scope.times = 0;
 	$scope.io = io();
 	myIO = $scope.io;
 	$scope.remainTickets = [];
@@ -30,6 +32,11 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 
 			case 'getTickets':
 				getTickets(d.data);
+				$scope.times = d.times;
+
+				if(again) $scope.show = true;
+				setTimeout(function() {$scope.show = false; $scope.$digest();}, 3000);
+				again = true;
 				$scope.$digest();
 				break;
 

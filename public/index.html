@@ -161,12 +161,25 @@
 		background: rgba(200, 0, 0, .4);
 		border: solid 1px rgba(200, 0, 0, .7);
 	}
+
+	.message {
+		position: fixed;
+		width: 400px;
+		height: 130px;
+		left: 50%;
+		top: 50%;
+		margin-left: -150px;
+		margin-top: -50px;
+		border: solid 2px rgba(255, 0, 0, .3);
+		background: rgba(255, 255, 255, .8);
+		text-align: center;
+	}
 </style>
 </head>
 <body ng-controller="TicketsCtrl">
 <div class="banner">
 	<h1>姜繪</h1>
-	<h2>告別歌壇演唱會</h2>
+	<h2>第 {{times}} 場告別歌壇演唱會</h2>
 	<h2>全球 {{views}} 歌迷共同矚目</h2>
 	<div class="operate">
 		<a class="button" href="#buy">前往購票</a>
@@ -178,7 +191,7 @@
 <div class="tickets">
 	<a name="buy"></a>
 	<div>
-		<h3>剩餘票券 {{countTickets.total}}（線上人數：{{online}}）(已售出：{{soldout.length}})</h3>
+		<h3>剩餘票券 {{countTickets.total}}（線上人數：{{online}}）</h3>
 		<div ng-repeat="(k, v) in countTickets.detail" class="sale">
 			<div>{{k}} - {{v}}</div>
 			<div>
@@ -195,6 +208,10 @@
 			<a>{{v[0]}}</a>
 		</div>
 	</div>
+</div>
+<div class="message" ng-show="show">
+	<h1>賀！第 {{times - 1}} 場完售</h1>
+	<h2>主辦單位決定加開第 {{times}} 場</h2>
 </div>
 </body>
 </html>

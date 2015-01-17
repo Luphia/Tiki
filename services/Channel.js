@@ -9,6 +9,8 @@ Channel.prototype.init = function(config) {
 		this.setConfig(config);
 	}
 
+	this.times = 1;
+
 	this.connection = {
 		current: 0,
 		history: 0,
@@ -102,6 +104,7 @@ Channel.prototype.start = function() {
 				case 'getTickets':
 					rs = {
 						"event": "getTickets",
+						"times": self.times,
 						"data": self.getTickets()
 					};
 					socket.emit('channel', rs);
@@ -128,6 +131,7 @@ Channel.prototype.start = function() {
 					socket.emit('channel', rs);
 					if(brs.data.length > 0) io.emit('channel', brs);
 
+					self.isFinish();
 					break;
 
 				case 'buyType':
@@ -153,6 +157,8 @@ Channel.prototype.start = function() {
 
 					socket.emit('channel', rs);
 					if(brs.data.length > 0) io.emit('channel', brs);
+
+					self.isFinish();
 					break;
 
 				case 'buyEvent':
@@ -178,9 +184,25 @@ Channel.prototype.start = function() {
 
 					socket.emit('channel', rs);
 					if(brs.data.length > 0) io.emit('channel', brs);
+
+					self.isFinish();
 					break;
 			}
 		});
+	});
+};
+
+Channel.prototype.isFinish = function() {
+	if(this.remainTickets.length > 0) return false;
+
+	this.times++;
+	this.seller.loadTicket();
+	this.remainTickets = this.seller.remainTickets;
+
+	this.io.emit('channel', {
+		"event": "getTickets",
+		"times": this.times,
+		"data": this.getTickets()
 	});
 };
 

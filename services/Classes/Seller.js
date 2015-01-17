@@ -260,7 +260,7 @@ Seller.prototype.setTicket = function(options) {
 		}
 
 	}
-	console.log(data.length);
+
 	this.db.postData(ticketOptions.event, data);
 	this.loadTicket();
 };
