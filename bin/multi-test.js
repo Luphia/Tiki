@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 var times = parseInt(process.argv[2]);
-times = times > 0? times: 1;
+times = times > 0? times: 100;
 
 var cp = require('child_process');
 var start;
