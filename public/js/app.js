@@ -30,13 +30,18 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 				customerEnter(d.data);
 				break;
 
+			case 'reset':
+				$scope.times = d.times;
+				$scope.show = true;
+				$scope.$digest();
+				setTimeout(function() {$scope.show = false; $scope.$digest();}, 3000);
+				$scope.io.emit('channel', {"event": "getTickets"});
+				break;
+
 			case 'getTickets':
 				getTickets(d.data);
 				$scope.times = d.times;
 
-				if(again) $scope.show = true;
-				setTimeout(function() {$scope.show = false; $scope.$digest();}, 3000);
-				again = true;
 				$scope.$digest();
 				break;
 

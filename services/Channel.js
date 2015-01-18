@@ -238,9 +238,8 @@ Channel.prototype.isFinish = function() {
 
 	try {
 		this.io.emit('channel', {
-			"event": "getTickets",
-			"times": this.times,
-			"data": this.getTickets()
+			"event": "reset",
+			"times": this.times
 		});
 	}
 	catch(e) {
