@@ -1,5 +1,4 @@
-﻿var request = require('request');
-var io = new require('socket.io-client');
+﻿var io = new require('socket.io-client');
 var Bot = require('./Bot2.js');
 var client = {};
 
