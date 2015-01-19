@@ -16,7 +16,6 @@ var client = {};
 
 var i = 0;
 var timer;
-var Bot = require('./Bot.js');
 
 function test() {
     if (i < 10000) {
