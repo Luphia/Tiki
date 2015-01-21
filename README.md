@@ -8,10 +8,10 @@ npm install
 node .
 ```
 ```shell
-sudo setcap cap_net_bind_service=+ep /usr/local/bin/node
+node --max_new_space_size=4096 --max_executable_size=2048 --max_old_space_size=4096 .
 ```
 ```shell
-node --max_new_space_size=4096 --max_executable_size=2048 --max_old_space_size=4096 .
+pm2 start --node-args="--max_old_space_size=3072 --max_executable_size=2048" bin/Tiki.js
 ```
 
 ## Test
