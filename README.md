@@ -11,4 +11,5 @@ node .
 ## Test
 ```shell
 node ./bin/multi-test.js 1000
+node --max_new_space_size=4096 --max_executable_size=2048 --max_old_space_size=4096 .
 ```
