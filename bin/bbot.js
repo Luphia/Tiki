@@ -40,6 +40,7 @@ app.get('/', function (req, res) {
     res.send('BOT伺服器 運作中')
 });
 
+var bb = 0;
 app.get('/:count', function (req, res) {
     var count = req.params.count;
     var i = 0;
@@ -49,7 +50,9 @@ app.get('/:count', function (req, res) {
             bot.start();
             timer = setTimeout(test, 100);
             i++;
+            bb = i;
         } else {
+            bb = 0;
             delete timer;
         };
     };
@@ -64,6 +67,8 @@ io.on('connection', function (socket) {
     console.log("新連線來自於 => " + address);
 
     setInterval(function () {
-        io.emit('data', collector.getCurrent());
+        var data = collector.getCurrent();
+        data['BOT'] = bb;
+        io.emit('data', data);
     }, 1000);
 });
