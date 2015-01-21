@@ -10,6 +10,11 @@ var io = require('socket.io')(server, { cookie: false });
 var cio = new require('socket.io-client');
 var Bot = require('./Bot2.js');
 
+var Collector = require('../services/Classes/monitor.network.js');
+var collector = new Collector();
+
+var timer;
+
 app.set('port', 8888);
 app.use(compress());
 app.use(bodyParser.urlencoded({ 'extended': false }))
@@ -37,26 +42,28 @@ app.get('/', function (req, res) {
 
 app.get('/:count', function (req, res) {
     var count = req.params.count;
-    var client = {};
-
     var i = 0;
-    var timer;
-
     function test() {
         if (i < count) {
             var bot = new Bot();
             bot.start();
             timer = setTimeout(test, 100);
             i++;
+        } else {
+            delete timer;
         };
     };
 
     timer = setTimeout(test, 100);
 
-    res.end('BOT伺服器 共發起： ' + count + ' 個自動 BOT。')
+    res.end('BOT伺服器 共發起： ' + count + ' 個自動 BOT。');
 });
 
 io.on('connection', function (socket) {
     var address = socket.handshake.address;
     console.log("新連線來自於 => " + address);
+
+    setInterval(function () {
+        io.emit('data', collector.getCurrent());
+    }, 1000);
 });
