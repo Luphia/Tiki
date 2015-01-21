@@ -22,7 +22,10 @@ Channel.prototype.init = function(config) {
 };
 Channel.prototype.setConfig = function(config) {
 	this.config = config;
-	this.io = require('socket.io').listen(this.config.get('server'));
+	this.io = require('socket.io').listen(this.config.get('server'), {
+	    'pingInterval': 3600000,
+	    'pingTimeout': 3600000
+	});
 };
 Channel.prototype.setSeller = function(seller) {
 	this.seller = seller;
