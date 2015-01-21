@@ -9,17 +9,18 @@ var server = http.Server(app);
 var io = require('socket.io')(server, { cookie: false });
 var cio = new require('socket.io-client');
 var Bot = require('./Bot2.js');
-
+var path = require('path');
 var Collector = require('../services/Classes/monitor.network.js');
 var collector = new Collector();
 
 var timer;
 
-app.set('port', 80);
+app.set('port', 8888);
 app.use(compress());
 app.use(bodyParser.urlencoded({ 'extended': false }))
 app.use(bodyParser.json())
 app.use(cookieParser());
+app.use(express.static(path.join(__dirname, '../public')));
 
 server.listen(app.get('port'), function () {
     var os = require('os');
@@ -41,14 +42,16 @@ app.get('/', function (req, res) {
 });
 
 var bb = 0;
-app.get('/:count', function (req, res) {
-    var count = req.params.count;
+app.get('/openbot', function (req, res) {
+    var ip = req.query.ip;
+    var count = req.query.count;
+    var sleep = req.query.sleep;
     var i = 0;
     function test() {
         if (i < count) {
-            var bot = new Bot();
+            var bot = new Bot({ ip: ip });
             bot.start();
-            timer = setTimeout(test, 100);
+            timer = setTimeout(test, sleep);
             i++;
             bb = i;
         } else {
@@ -57,9 +60,8 @@ app.get('/:count', function (req, res) {
         };
     };
 
-    timer = setTimeout(test, 100);
-
-    res.end('BOT伺服器 共發起： ' + count + ' 個自動 BOT。');
+    timer = setTimeout(test, sleep);
+    res.send({ status: 'OK', info: 'BOT伺服器 共發起： ' + count + ' 個自動 BOT。' });
 });
 
 io.on('connection', function (socket) {

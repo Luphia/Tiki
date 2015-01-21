@@ -29,10 +29,10 @@ var Bot = function (config) { this.init(config); };
 
 Bot.prototype.init = function (config) {
     var self = this;
-
+    var ip = config.ip;
     this.ID = "BOT" + zeroFill(++ID, 8);
     this.birth = new Date();
-    this.connect = io('ws://localhost', {
+    this.connect = io('ws://' + ip, {
         'force new connection': true
     });
     this.connect.on('channel', function (d) {
