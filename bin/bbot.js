@@ -15,7 +15,7 @@ var collector = new Collector();
 
 var timer;
 
-app.set('port', 8888);
+app.set('port', 80);
 app.use(compress());
 app.use(bodyParser.urlencoded({ 'extended': false }))
 app.use(bodyParser.json())
