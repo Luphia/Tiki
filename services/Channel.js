@@ -70,15 +70,7 @@ ctrl.prototype.isFinish = function() {
 	this.seller.loadTicket();
 	this.remainTickets = this.seller.remainTickets;
 
-	try {
-		this.io.emit('channel', {
-			"event": "reset",
-			"times": this.times
-		});
-	}
-	catch(e) {
-		console.log(e);
-	}
+	return true;
 };
 
 
@@ -165,7 +157,18 @@ Channel.prototype.start = function() {
 							io.emit('channel', brs);
 						}
 						catch(e) {}
-						channelCtrl.isFinish();
+
+						if(channelCtrl.isFinish()) {
+							try {
+								io.emit('channel', {
+									"event": "reset",
+									"times": this.times
+								});
+							}
+							catch(e) {
+								console.log(e);
+							}
+						}
 					}
 					break;
 
@@ -198,7 +201,17 @@ Channel.prototype.start = function() {
 							io.emit('channel', brs);
 						}
 						catch(e) {}
-						channelCtrl.isFinish();
+						if(channelCtrl.isFinish()) {
+							try {
+								io.emit('channel', {
+									"event": "reset",
+									"times": this.times
+								});
+							}
+							catch(e) {
+								console.log(e);
+							}
+						}
 					}
 					break;
 
@@ -231,7 +244,17 @@ Channel.prototype.start = function() {
 							io.emit('channel', brs);
 						}
 						catch(e) {}
-						channelCtrl.isFinish();
+						if(channelCtrl.isFinish()) {
+							try {
+								io.emit('channel', {
+									"event": "reset",
+									"times": this.times
+								});
+							}
+							catch(e) {
+								console.log(e);
+							}
+						}
 					}
 					break;
 			}
