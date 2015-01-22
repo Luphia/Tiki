@@ -1,3 +1,5 @@
+var Ctrl = require('./Classes/Ctrl.js');
+
 var Channel = function(config) {
 	this.init(config);
 };
@@ -5,78 +7,8 @@ var Channel = function(config) {
 var lastUpdate = 0;
 var channelCtrl;
 
-var ctrl = function(config) { this.init(); };
-ctrl.prototype.init = function(config) {
-	if(config) {
-		this.setConfig(config);
-	}
-
-	this.times = 1;
-
-	this.connection = {
-		current: 0,
-		history: 0,
-		focus: {}
-	};
-
-	this.remainTickets = [];
-	this.point = 0;
-};
-ctrl.prototype.getTickets = function() {
-	return this.remainTickets;
-};
-ctrl.prototype.getAreaTickets = function() {
-	var i = 0, rs = [];
-	var pick = 10;
-	if(pick > this.remainTickets.length) { return this.remainTickets; }
-
-	var s = Math.floor( Math.random() * (this.remainTickets.length - 10) );
-
-	return this.remainTickets.slice(s, s + 10);
-};
-ctrl.prototype.buyCode = function(code, client) {
-	var rs = this.seller.sellByCode(code, client);
-	return rs;
-};
-ctrl.prototype.buyType = function(type, number, client) {
-	var rs = [];
-	number = parseInt(number);
-	number = number > 0? number: 1;
-
-	for(var i = 0; i < number; i++) {
-		rs.push(this.seller.sellByType(type, client));
-	}
-
-	return rs;
-};
-ctrl.prototype.buyEvent = function(ev, number, client) {
-	var rs = [];
-	number = parseInt(number);
-	number = number > 0? number: 1;
-
-	for(var i = 0; i < number; i++) {
-		rs.push(this.seller.sellByEvent(ev, client));
-	}
-
-	return rs;
-};
-ctrl.prototype.update = function() {
-	return true;
-};
-ctrl.prototype.isFinish = function() {
-	if(this.remainTickets.length > 0) return false;
-
-	this.times++;
-	this.seller.loadTicket();
-	this.remainTickets = this.seller.remainTickets;
-
-	return true;
-};
-
-
-
 Channel.prototype.init = function(config) {
-	channelCtrl = new ctrl(config);
+	channelCtrl = new Ctrl(config);
 };
 Channel.prototype.setConfig = function(config) {
 	this.config = config;
