@@ -91,7 +91,6 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 		$scope.io.emit('channel', {"event": "buyType", "data": {"type": type, "number": number}})
 	}
 	$scope.buyCode = function(code) {
-		console.log(code);
 		$scope.io.emit('channel', {"event": "buyCode", "data": code})
 	}
 
@@ -153,7 +152,7 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 				$scope.remainTickets.splice( $scope.remainTickets.indexOf(code), 1 );
 				$scope.soldout.push(code);
 
-				var index = parseInt(code.substr(3));
+				var index = parseInt(code.substr(3)) - 1;
 				$scope.tickets[index].free = false;
 			}
 		}
@@ -161,7 +160,7 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 			$scope.remainTickets.splice( $scope.remainTickets.indexOf(d), 1 );
 			$scope.soldout.push(d);
 
-			var index = parseInt(d.substr(3));
+			var index = parseInt(d.substr(3)) - 1;
 			$scope.tickets[index].free = false;
 		}
 		countRemain();
