@@ -73,10 +73,10 @@
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#03ffffff', endColorstr='#e6ffffff',GradientType=0 ); /* IE6-9 */
 	}
 
-	.tickets > div:first {
+	.tickets > div {
 		padding: 10px;
 		float: left;
-		width: 60%;
+		width: 40%;
 		margin-right: 30px;
 	}
 	.tickets > div > div.sale {
@@ -209,9 +209,8 @@
 
 <div class="tickets">
 	<a name="buy"></a>
-	<div class="seats">
-		<div class="seat" ng-repeat="(k, v) in tickets" ng-click="buyCode(v.code)" ng-class="v.free? '': 'full'">{{v.code}}</div>
-		<!-- h3>剩餘票券 {{countTickets.total}}（線上人數：{{online}}）</h3>
+	<div>
+		<h3>剩餘票券 {{countTickets.total}}（線上人數：{{online}}）</h3>
 		<div ng-repeat="(k, v) in countTickets.detail" class="sale">
 			<div>{{k}} - {{v}}</div>
 			<div>
@@ -219,7 +218,7 @@
 				<a class="sbutton" ng-click="buyType(k, 2)">買二張</a>
 				<a class="sbutton" ng-click="buyType(k, 3)">買三張</a>
 			</div>
-		</div -->
+		</div>
 	</div>
 	<div>
 		<h3>我已購買 {{bought.length}}</h3>

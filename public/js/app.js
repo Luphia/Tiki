@@ -5,6 +5,17 @@ myIO.emit('channel', {"event": "buyCode", "data": tickets[1]})
 
  */
 
+var intString = function(int, length) {
+	var l = length > 0? length: 8;
+	var rs = int.toString();
+
+	while(rs.length < l) {
+		rs = '0' + rs;
+	}
+
+	return rs;
+};
+
 var Tiki = angular.module('Tiki', [
 	'ngRoute'
 ]);
@@ -14,6 +25,14 @@ var tickets;
 var again;
 
 Tiki.controller('TicketsCtrl', function ($scope, $http) {
+	$scope.tickets = [];
+	for(var i = 0; i < 1000; i++) {
+		$scope.tickets.push({
+			"code": "A01" + intString(i+1),
+			"free": false
+		});
+	}
+
 	$scope.views = 0;
 	$scope.times = 0;
 	$scope.io = io();
@@ -71,6 +90,10 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 	$scope.buyType = function(type, number) {
 		$scope.io.emit('channel', {"event": "buyType", "data": {"type": type, "number": number}})
 	}
+	$scope.buyCode = function(code) {
+		console.log(code);
+		$scope.io.emit('channel', {"event": "buyCode", "data": code})
+	}
 
 	var customerEnter = function(d) {
 		$scope.views = d.history;
@@ -80,6 +103,11 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 	var getTickets = function(d) {
 		$scope.remainTickets = d;
 		tickets = $scope.remainTickets;
+
+		for(var k in $scope.tickets) {
+			$scope.tickets[k].free = (d.indexOf($scope.tickets[k].code) > -1);
+		}
+
 		countRemain();
 	};
 	var countRemain = function() {
@@ -105,6 +133,8 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 	};
 	var buyCode = function(d) {
 		if(d) $scope.bought.push(d);
+
+
 	};
 	var buyType = function(d) {
 		for(var k in d) {
@@ -122,11 +152,17 @@ Tiki.controller('TicketsCtrl', function ($scope, $http) {
 				var code = d[k];
 				$scope.remainTickets.splice( $scope.remainTickets.indexOf(code), 1 );
 				$scope.soldout.push(code);
+
+				var index = parseInt(code.substr(3));
+				$scope.tickets[index].free = false;
 			}
 		}
 		else {
 			$scope.remainTickets.splice( $scope.remainTickets.indexOf(d), 1 );
 			$scope.soldout.push(d);
+
+			var index = parseInt(d.substr(3));
+			$scope.tickets[index].free = false;
 		}
 		countRemain();
 		tickets = $scope.remainTickets;

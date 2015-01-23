@@ -11,11 +11,11 @@ var cio = new require('socket.io-client');
 var Bot = require('./Bot2.js');
 var path = require('path');
 var Collector = require('../services/Classes/monitor.network.js');
-var collector = new Collector();
+//var collector = new Collector();
 
 var timer;
 
-app.set('port', 80);
+app.set('port', 5566);
 app.use(compress());
 app.use(bodyParser.urlencoded({ 'extended': false }))
 app.use(bodyParser.json())
@@ -66,11 +66,4 @@ app.get('/openbot', function (req, res) {
 
 io.on('connection', function (socket) {
     var address = socket.handshake.address;
-    console.log("新連線來自於 => " + address);
-
-    setInterval(function () {
-        var data = collector.getCurrent();
-        data['BOT'] = bb;
-        io.emit('data', data);
-    }, 1000);
 });

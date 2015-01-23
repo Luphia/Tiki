@@ -224,10 +224,7 @@ Seller.prototype.setTicket = function(options) {
 	ticketOptions = {
 		event: "concert",
 		type: {
-			"A01": 250,
-			"A02": 250,
-			"A03": 250,
-			"A04": 250
+			"A01": 1000
 		}
 	};
 
