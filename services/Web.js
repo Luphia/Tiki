@@ -1,7 +1,6 @@
 var express = require('express')
 ,	Session = require('express-session')
 ,	RedisStore = require('connect-redis')(Session)
-,	express = require('express')
 ,	favicon = require('serve-favicon')
 ,	fs = require('fs')
 ,	path = require('path')
@@ -10,7 +9,7 @@ var express = require('express')
 ;
 
 var Web = function(config) {
-	this.init();
+	this.init(config);
 };
 
 Web.prototype.init = function(config) {
