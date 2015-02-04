@@ -174,17 +174,17 @@ Bot.prototype.finish = function () {
     else {
         var worktime = new Date() - this.birth;
         console.log('\x1b[32m%s\x1b[0m worktime - %d sec', this.ID, (worktime / 1000));
-        //this.connect.disconnect();
+        this.connect.disconnect();
 
-        //this.ID = "BOT" + zeroFill(++ID, 8);
-        //this.birth = new Date();
-        //this.connect.connect();
-        //this.want = parseInt(random(1, 4));
-        //this.goods = [];
-        //this.remainTickets = [];
-        //this.remainType = {};
-        //this.request('getTickets');
-        //this.start();
+        this.ID = "BOT" + zeroFill(++ID, 8);
+        this.birth = new Date();
+        this.connect.connect();
+        this.want = parseInt(random(1, 4));
+        this.goods = [];
+        this.remainTickets = [];
+        this.remainType = {};
+        this.request('getTickets');
+        this.start();
     }
 };
 Bot.prototype.start = function () {
